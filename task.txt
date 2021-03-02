@@ -1,0 +1,19 @@
+1- ketab khoone darim ke har ketab ro yek nafar neveshte
+   vali har ketabi tavasote entesharati haye mokhtalef
+   too zaman haye mokhtalef chap shode bashe
+   vali hark ketabkhoone faghat 1 noskhe az 1 ketab o dare
+   va har noskhe az ketab mitoone too zaman haye mokhtalef
+   tavasote har fardi gharz gerefte beshe.
+2- 4 ta api mikhaim
+    1- ketab besazim
+    2- list hame ketaba ro begiri
+    3- hame zaman hayii ke ye ketab chap shode ro begire
+    4- list hame ketabayii ke yeki neveshte
+3- convetion haye method request rayat shavad
+   masalan age bekhaim list ketab haro begiram
+   har methodi get bayad permission denied bede ,
+   az tarafi age masalan bekhaim list tamam ketabayii
+   ke yeki neveshte ro begiram pas api bayad id fellani
+   ro vase voroodi begire va list ketabaye hamoon fardo
+   pas bede ke masalan in id ro too kwargs bedim dar vaghe too url.
+4- say kon too hame ina input validation dashte bashi.
