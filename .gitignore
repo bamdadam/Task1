@@ -2,6 +2,7 @@
 /venv/
 db.sqlite3
 /.idea/
+task.txt
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
