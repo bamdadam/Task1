@@ -38,7 +38,11 @@ def make_book(request, **kwargs):
 
 
 def list_books(request):
-    return HttpResponse(Book.objects.all())
+    if request.method == 'GET':
+        book_list = Book.objects.all()
+        return HttpResponse('\n'.join(str(i) for i in book_list))
+    else:
+        raise ValidationError('invalid request')
 
 
 def book_publish_dates(request):
