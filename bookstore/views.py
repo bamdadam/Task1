@@ -55,7 +55,7 @@ def book_publish_dates(request, **kwargs):
                                         book_writer=writer)
                 return HttpResponse(book)
             except:
-                return HttpResponse(None)
+                return ValidationError("book not found")
         except(TypeError, KeyError) as e:
             return HttpResponse(traceback.print_exc())
 
