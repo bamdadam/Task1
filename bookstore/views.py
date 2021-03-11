@@ -49,13 +49,12 @@ def book_publish_dates(request, **kwargs):
         try:
             book_param = json.loads(request.body)
             try:
-                writer = Writer.objects.get(id=kwargs['id'])
                 book = Book.objects.get(book_title=book_param['book_title'],
                                         book_date=book_param['book_date'],
-                                        book_writer=writer)
+                                        book_writer=book_param['book_writer'])
                 return HttpResponse(book)
             except:
-                return ValidationError("book not found")
+                raise ValidationError("book not found")
         except(TypeError, KeyError) as e:
             return HttpResponse(traceback.print_exc())
 
