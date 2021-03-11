@@ -12,12 +12,9 @@ import json
 
 def make_book(request, **kwargs):
     if request.method == 'POST':
-        # Writer.objects.get(name=kwargs['name'], family_name=kwargs['family_name'])
         writer = Writer.objects.get(id=kwargs['id'])
-        # print(writer)
         try:
             book_param = json.loads(request.body)
-            # print(book_param)
             if len(book_param['book_title']) <= 20:
                 book_title = book_param['book_title']
                 print(book_title)
@@ -31,7 +28,9 @@ def make_book(request, **kwargs):
                 raise ValidationError('book date should be a valid date')
         except (TypeError, KeyError) as e:
             return HttpResponse(traceback.print_exc())
-        book = Book.objects.create(book_writer=writer, book_title=book_title, book_date=book_date)
+        book = Book.objects.create(book_writer=writer,
+                                   book_title=book_title,
+                                   book_date=book_date)
         return HttpResponse(book)
     else:
         raise ValidationError('invalid request')
@@ -45,8 +44,23 @@ def list_books(request):
         raise ValidationError('invalid request')
 
 
-def book_publish_dates(request):
-    pass
+def book_publish_dates(request, **kwargs):
+    if request.method == 'GET':
+        try:
+            book_param = json.loads(request.body)
+            try:
+                writer = Writer.objects.get(id=kwargs['id'])
+                book = Book.objects.get(book_title=book_param['book_title'],
+                                        book_date=book_param['book_date'],
+                                        book_writer=writer)
+                return HttpResponse(book)
+            except:
+                return HttpResponse(None)
+        except(TypeError, KeyError) as e:
+            return HttpResponse(traceback.print_exc())
+
+    else:
+        raise ValidationError('invalid request')
 
 
 def writers_books(request):
