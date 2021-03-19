@@ -73,7 +73,7 @@ def writers_books(request):
                 writer = Writer.objects.get(id=writer_param["id"])
                 return HttpResponse('\n'.join(i.__str__() for i in writer.book_set.all()))
             except:
-                pass
+                raise ValidationError("writer not found")
         except(TypeError, KeyError):
             return HttpResponse(traceback.print_exc())
 
