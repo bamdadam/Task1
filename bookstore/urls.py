@@ -4,5 +4,6 @@ from bookstore import views
 urlpatterns = [
     path('createbook/<int:id>/', views.make_book, name='make book'),
     path('listbooks/', views.list_books, name='list books'),
-    path('bookpublish/', views.book_publish_dates, name='book publish dates'),
+    path('bookpublish/<int:id>/', views.book_publish_dates, name='book publish dates'),
+    path('writersbooks/', views.writers_books, name= 'writer\'s books'),
 ]

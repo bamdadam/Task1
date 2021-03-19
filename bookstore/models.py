@@ -15,8 +15,8 @@ class Writer(models.Model):
 class Book(models.Model):
     book_title = models.CharField(max_length=50)
     book_writer = models.ForeignKey(Writer, on_delete=models.CASCADE)
-    book_date = models.DateField('date published')
-    book_available = False
+    # book_date = models.DateField('date published')
+    book_available = True
 
     def __str__(self):
         return self.book_title
@@ -25,7 +25,13 @@ class Book(models.Model):
         return self.book_available
 
     def borrow_book(self):
-        self.book_available = True
+        self.book_available = False
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['book_title', 'book_writer'], name='unique books')
+        ]
+
 
 # class BookStore(models.Model):
 #     book = models.OneToOneField(Book, on_delete=models.CASCADE)
@@ -45,9 +51,14 @@ class Person(models.Model):
         return self.name + ' ' + self.family_name
 
 
-class PrintBook:
-    pass
+class PrintBook(models.Model):
+    publisher = models.ForeignKey('Publisher', on_delete=models.CASCADE)
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    publish_date = models.DateField('date published')
 
 
-class Publisher:
-    pass
+class Publisher(models.Model):
+    name = models.CharField(max_length=35)
+
+    def __str__(self):
+        return self.name

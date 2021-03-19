@@ -4,7 +4,7 @@ from datetime import datetime
 from django.core.exceptions import ValidationError
 from django.shortcuts import render
 from django.http import HttpResponse, Http404
-from bookstore.models import Writer, Book
+from bookstore.models import Writer, Book, PrintBook, Publisher
 import json
 
 
@@ -20,17 +20,20 @@ def make_book(request, **kwargs):
                 print(book_title)
             else:
                 raise ValidationError('book title len must be less than equal to 20')
-            try:
-                datetime.strptime(book_param['book_date'], "%Y-%m-%d")
-                book_date = book_param['book_date']
-                print(book_date)
-            except:
-                raise ValidationError('book date should be a valid date')
+            # try:
+            #     datetime.strptime(book_param['book_date'], "%Y-%m-%d")
+            #     book_date = book_param['book_date']
+            #     print(book_date)
+            # except:
+            #     raise ValidationError('book date should be a valid date')
         except (TypeError, KeyError) as e:
             return HttpResponse(traceback.print_exc())
+        # book = Book.objects.create(book_writer=writer,
+        #                            book_title=book_title,
+        #                            book_date=book_date)
         book = Book.objects.create(book_writer=writer,
                                    book_title=book_title,
-                                   book_date=book_date)
+                                   )
         return HttpResponse(book)
     else:
         raise ValidationError('invalid request')
@@ -50,12 +53,12 @@ def book_publish_dates(request, **kwargs):
             book_param = json.loads(request.body)
             try:
                 book = Book.objects.get(book_title=book_param['book_title'],
-                                        book_date=book_param['book_date'],
-                                        book_writer=book_param['book_writer'])
-                return HttpResponse(book)
+                                        book_writer=kwargs['id'])
+                return HttpResponse('\n'.join(str(j) for j in
+                                              sorted(i.publish_date for i in book.printbook_set.all())))
             except:
                 raise ValidationError("book not found")
-        except(TypeError, KeyError) as e:
+        except(TypeError, KeyError):
             return HttpResponse(traceback.print_exc())
 
     else:
@@ -63,4 +66,16 @@ def book_publish_dates(request, **kwargs):
 
 
 def writers_books(request):
-    pass
+    if request.method == "GET":
+        try:
+            writer_param = json.loads(request.body)
+            try:
+                writer = Writer.objects.get(id=writer_param["id"])
+                return HttpResponse('\n'.join(i.__str__() for i in writer.book_set.all()))
+            except:
+                pass
+        except(TypeError, KeyError):
+            return HttpResponse(traceback.print_exc())
+
+    else:
+        raise   ValidationError("invalid request")
